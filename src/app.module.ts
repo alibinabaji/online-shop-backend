@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './user/users.module';
+import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { join } from 'path';
 
@@ -12,7 +12,7 @@ import { join } from 'path';
       port: 3306,
       username: 'root',
       password: '',
-      database: 'test',
+      database: 'online_shop',
       entities: [join(__dirname, '**', '*.entity{.ts,.js}')],
       synchronize: true,
       }),

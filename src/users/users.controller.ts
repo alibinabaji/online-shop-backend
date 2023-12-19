@@ -1,7 +1,7 @@
 import { Controller, Post, Body, NotFoundException, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { UsersService } from './users.service';
 
-@Controller('user')
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

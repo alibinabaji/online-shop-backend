@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.entity';
 
@@ -6,15 +6,31 @@ import { Product } from './product.entity';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Get()
+  @Post('addNew')
+  async createProduct(@Body() body: Partial<Product>): Promise<Product> {
+    return this.productsService.createProduct(body);
+  }
+
+  @Get('list')
   async getAllProducts(): Promise<Product[]> {
     return this.productsService.getAllProducts();
   }
 
-  @Post()
-  async createProduct(@Body() body: { name: string; price: number; description: string; }): Promise<Product> {
-    const { name, price, description } = body;
-    return this.productsService.createProduct(name, price, description);
+  @Get(':id')
+  async getProductById(@Param('id') id: string): Promise<Product> {
+    const productId = parseInt(id, 10);
+    return this.productsService.getProductById(productId);
   }
 
+  @Put(':id')
+  async updateProduct(@Param('id') id: string, @Body() body: Partial<Product>): Promise<Product> {
+    const productId = parseInt(id, 10);
+    return this.productsService.updateProduct(productId, body);
+  }
+
+  @Delete(':id')
+  async deleteProduct(@Param('id') id: string): Promise<void> {
+    const productId = parseInt(id, 10);
+    return this.productsService.deleteProduct(productId);
+  }
 }
