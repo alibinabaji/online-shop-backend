@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Put, Delete, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.entity';
 
@@ -33,4 +33,10 @@ export class ProductsController {
     const productId = parseInt(id, 10);
     return this.productsService.deleteProduct(productId);
   }
+
+  @Get('category-name')
+  async getProductsByCategory(@Query('category') category: string): Promise<Product[]> {
+    return this.productsService.getProductsByCategory(category);
+  }
+
 }

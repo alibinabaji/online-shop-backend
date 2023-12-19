@@ -40,4 +40,8 @@ export class ProductsService {
     const product = await this.getProductById(productId);
     await this.productsRepository.remove(product);
   }
+
+  async getProductsByCategory(category: string): Promise<Product[]> {
+    return this.productsRepository.find({ where: { category } });
+  }
 }
