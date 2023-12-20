@@ -1,3 +1,4 @@
+// order.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from '../users/user.entity';
 
@@ -10,9 +11,10 @@ export class Order {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ type: 'jsonb', nullable: false })
-  orderItems: Array<{ productId: number; quantity: number; price: number }>;
-
+  @Column({ type: 'json', nullable: false })
+  orderItems: Array<
+  { productId: number; quantity: number; price: number }>;
+  
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
   totalAmount: number;
 
@@ -25,7 +27,7 @@ export class Order {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'json', nullable: true })
   shippingAddress: {
     address: string;
     city: string;

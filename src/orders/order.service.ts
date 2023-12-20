@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { User } from '../users/user.entity';
+import { OrderDto } from 'src/dto/order.dto';
 
 @Injectable()
 export class OrderService {
@@ -11,17 +12,21 @@ export class OrderService {
     private orderRepository: Repository<Order>,
   ) {}
 
-  async placeOrder(user: User, orderItems: Array<{ productId: number; quantity: number; price: number }>): Promise<Order> {
-    const totalAmount = orderItems.reduce((total, item) => total + item.quantity * item.price, 0);
+  async placeOrder(user: User, orderDto: OrderDto): Promise<Order> {
 
+  
     const order = new Order();
     order.user = user;
-    order.orderItems = orderItems;
-    order.totalAmount = totalAmount;
-    order.orderStatus = 'pending';
+    Object.assign(order, orderDto);
+  
+    try {
+      return await this.orderRepository.save(order);
+    } catch (error) {
+      throw new Error(`Error placing order: ${error.message}`);
+    }
+}
 
-    return this.orderRepository.save(order);
-  }
+  
 
   async getOrderHistory(userId: number): Promise<Order[]> {
     return this.orderRepository.find({
