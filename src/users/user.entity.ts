@@ -9,12 +9,6 @@ export class User {
   @Column()
   username: string;
 
-  @Column()
-  password: string;
-
-  @Column({ default: 'customer' })
-  role: string;
-
   @Column({ nullable: true })
   firstName: string;
 
@@ -42,6 +36,7 @@ export class User {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
   
+<<<<<<< HEAD
   @Column({ nullable: true })
   resetToken: string;
 
@@ -51,3 +46,6 @@ export class User {
   @OneToMany(() => Order, order => order.user)
   orders: Order[];
 }
+=======
+}
+>>>>>>> auth
