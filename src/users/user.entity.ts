@@ -35,17 +35,7 @@ export class User {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
-  
-<<<<<<< HEAD
-  @Column({ nullable: true })
-  resetToken: string;
-
-  @Column({ nullable: true })
-  resetTokenExpiry: Date;
 
   @OneToMany(() => Order, order => order.user)
   orders: Order[];
 }
-=======
-}
->>>>>>> auth
