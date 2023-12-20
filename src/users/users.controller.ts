@@ -1,5 +1,6 @@
-import { Controller, Post, Body, NotFoundException, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Controller, Post, Body, NotFoundException, UnauthorizedException, ConflictException, Patch, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { User } from './user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -12,8 +13,9 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    const passwordMatch = await this.usersService.comparePasswords(password, user.password);
 
-    if (user.password !== password) {
+    if (!passwordMatch) {
       throw new UnauthorizedException('Invalid password');
     }
 
@@ -29,5 +31,27 @@ export class UsersController {
     } catch (error) {
       throw new ConflictException(error.message);
     }
+  }
+
+  @Patch('update-profile/:userId')
+  async updateProfile(@Param('userId') userId: number, @Body() body: Partial<User>): Promise<User> {
+    return this.usersService.updateProfile(userId, body);
+  }
+  
+  @Post('reset-password/:username')
+  async requestPasswordReset(@Param('username') username: string): Promise<{ message: string }> {
+    const resetToken = await this.usersService.generateResetToken(username);
+    // Send the resetToken to the user through email or other means
+    return { message: 'Password reset token generated' };
+  }
+
+  @Patch('reset-password/:username/:resetToken')
+  async resetPassword(
+    @Param('username') username: string,
+    @Param('resetToken') resetToken: string,
+    @Body() body: { newPassword: string },
+  ): Promise<{ message: string }> {
+    await this.usersService.resetPassword(username, body.newPassword, resetToken);
+    return { message: 'Password reset successful' };
   }
 }
