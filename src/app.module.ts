@@ -21,7 +21,7 @@ import { OrderModule } from './orders/order.module';
     UsersModule,
     ProductsModule,
     AuthModule,
-    OrderModule
+    OrderModule,
   ],
   controllers: [],
   providers: [],
